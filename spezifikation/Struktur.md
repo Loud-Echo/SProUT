@@ -1,4 +1,4 @@
-#Struktur
+# Struktur
 SProUT zentrale Struktur basiert auf Speicherorten und dem verschieben von Daten zwischen diesen.
 Alle Sprout Programme sind Funktionen, die eine bestimmte Anzahl an Daten aus der Konsole einlesen 
 (auch keine Daten einzulesen ist möglich)
