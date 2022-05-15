@@ -2,11 +2,16 @@
 Die Syntax von Sprout basiert auf Datenströmen, von Speicherort zu Speicherort und durch Funktionen.
 
 ## Definition von Funktionen
-Funktionen 
+Funktionen werden durch folgende Syntax gekennzeichnet:
+```
+func [Name der Funktion]
+    [Inhalt der Funktion]
+cnuf
+```
 
 ## Symbole der Speicherorte
 Der rechte Stack wird `>` geschrieben, der linke `<`, Input `in` Output `out`, das Jumpregister `jmp`, das Testregister `tst`
-Die verwendeten Variablen werden am Anfang einer Funktion mit folgnder Syntax definiert:
+Die verwendeten Variablen werden am Anfang einer Funktion mit folegnder Syntax definiert:
 ```
 var 
     [Name einer Variable]
