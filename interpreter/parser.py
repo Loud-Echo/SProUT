@@ -3,7 +3,6 @@ from typing import List, Tuple
 
 
 RESERVED = ["<", ">", "inn", "out", "tst", "jmp", "if", "fi", "while", "elihw", "jump", "var", "rav", "func", "cnuf"]
-# TODO raw numbers
 
 
 def parse_file(tokens: List[Tuple[int, str]]):
@@ -24,7 +23,7 @@ def parse_func(i: int, tokens: List[Tuple[int, str]]) -> (Function, int):
     i += 1
     var_names = []
     while tokens[i][1] != "rav":
-        if not tokens[i][1] in RESERVED + var_names:
+        if not tokens[i][1] in RESERVED + var_names and tokens[i][1][0] != '"':
             var_names.append(tokens[i][1])
         else:
             raise (SyntaxError(f"Error in VarBlock Parsing (line #{tokens[i][0]})"))
@@ -54,7 +53,7 @@ def parse_block(i: int, tokens: List[Tuple[int, str]], var_block: VarBlock, end_
                 operations.append(While(tokens[i][0]))
             case "elihw":
                 operations.append(Elihw())
-            case o if o in origins:
+            case o if o in origins or o[0] == '"':
                 shift, i = parse_shift(i, tokens, var_block)
                 operations.append(shift)
             case _:
@@ -72,6 +71,8 @@ def parse_shift(i: int, tokens: List[Tuple[int, str]], var_block: VarBlock) -> (
             orig = Stack(name)
         case "jmp" | "tst" as name:
             orig = Register(name)
+        case n if n[0] == '"':
+            orig = Number(int(n[1::]))
         case name if name in list(map(lambda x: x.name, var_block.content)):
             orig = Var(name)
         case _:
