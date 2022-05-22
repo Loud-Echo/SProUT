@@ -14,9 +14,10 @@ class Memory (Token):
     pass
 
 
-class VarName (Memory):
+class Var (Memory):
     def __init__(self, name: str):
         self.name = name
+        self.val = 0
 
 
 class Stack (Memory):
@@ -46,6 +47,10 @@ class Statement (Token):
     pass
 
 
+class Jump (Statement):
+    pass
+
+
 class Shift (Statement):
     def __init__(self, line: int, origin: Memory | Input | Number, target: Memory | Output, funcs: List[FuncName]):
         self.line = line
@@ -54,13 +59,18 @@ class Shift (Statement):
         self.funcs = funcs
 
 
+class While(Shift):
+    def __init__(self, line: int):
+        super().__init__(line, Number(line), Register("jmp"), [])
+
+
 class Block (Statement):
-    def __init__(self, content: List[Statement] | List[VarName]):
+    def __init__(self, content: List[Statement] | List[Var]):
         self.content = content
 
 
 class VarBlock (Block):
-    def __init__(self, names: List[VarName]):
+    def __init__(self, names: List[Var]):
         super().__init__(names)
 
 
@@ -73,3 +83,8 @@ class Function (Block):
 class IfFi (Block):
     def __init__(self, content: (List[Statement])):
         super().__init__(content)
+
+
+class Elihw (IfFi):
+    def __init__(self):
+        super().__init__([Jump()])

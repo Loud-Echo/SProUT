@@ -10,7 +10,7 @@ cnuf
 ```
 
 ## Symbole der Speicherorte
-Der rechte Stack wird `>` geschrieben, der linke `<`, Input `in` Output `out`, das Jumpregister `jmp`, das Testregister `tst`
+Der rechte Stack wird `>` geschrieben, der linke `<`, Input `inn` Output `out`, das Jumpregister `jmp`, das Testregister `tst`
 Die verwendeten Variablen werden am Anfang einer Funktion mit folegnder Syntax definiert:
 ```
 var 
@@ -45,13 +45,14 @@ fi
 ```
 
 ## Das Jumpregister
-Das Jumpregister kann auf eine bestimmte Zeile gesetzt werden. Durch das Schlagwort `jump`, 
-springt die Ausführung des Programms an diese Stelle. Falls die Zeile nicht Teil der momentanen Funktion ist, wird nicht
-gesprungen und ein Fehler wird hervorgerufen.
+Das Jumpregister kann auf eine bestimmte Token-Nummer gesetzt werden (Erlkärung zu Token-Nummer in eigenem Eintrag). 
+<!--- TODO: besagte eigene Datei---> Durch das Schlagwort `jump`, springt die Ausführung des Programms an diese Stelle. Falls der Token nicht Teil 
+der momentanen Funktion ist oder Anfang eines Blockes/einer Operation ist, 
+wird nicht gesprungen und ein Fehler wird hervorgerufen.
 
 ## Die While-Schleife
 Die While-Schleife kombiniert die letzten beiden Konzepte: Das Schlagwort `while` setzt das Jumpregister 
-auf die momentane Zeile, `elihw` ist tut das selbe wie:
+auf die momentane Zeile, `elihw` tut das selbe wie:
 ```
 if 
     jump

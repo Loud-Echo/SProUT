@@ -2,11 +2,17 @@ func main
     var
         hehe
     rav
-    "2 <
+    inn <
     > <   # hehee
     < tst
-    "3 hehe
-    hehe <
-    hehe >
+    inn hehe
+    hehe jmp
+    if
+        hehe <
+        while
+        hehe >
+        elihw
+    fi
+    jump
     < >
 cnuf
