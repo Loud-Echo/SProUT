@@ -6,13 +6,13 @@ def interpret(file_name):
     with open(file_name) as source:
         source = map(lambda s: s.strip(), source.readlines())
     tokens = []
-    for line in source:
+    for line_no, line in enumerate(source):
         for i in line.split(" "):
             if i == "#":
                 break
             else:
-                tokens.append(i)
-    print(tokens)
+                if i != "":
+                    tokens.append((line_no+1, i,))
     funcs = parser.parse_file(tokens)
 
 
