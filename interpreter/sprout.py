@@ -1,5 +1,7 @@
 import sys
 import parser
+import runner
+import memory
 
 
 def interpret(file_name):
@@ -14,6 +16,7 @@ def interpret(file_name):
                 if i != "":
                     tokens.append((line_no+1, i,))
     funcs = parser.parse_file(tokens)
+    runner.run_func("main", funcs, memory.Inn(input), memory.Out(print))
 
 
 if __name__ == "__main__":

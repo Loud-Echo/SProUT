@@ -17,7 +17,6 @@ class Memory (Token):
 class Var (Memory):
     def __init__(self, name: str):
         self.name = name
-        self.val = 0
 
 
 class Stack (Memory):
@@ -44,7 +43,8 @@ class Output (Token):
 
 
 class Statement (Token):
-    pass
+    def __init__(self, line: int):
+        self.line = line
 
 
 class Jump (Statement):
@@ -53,7 +53,7 @@ class Jump (Statement):
 
 class Shift (Statement):
     def __init__(self, line: int, origin: Memory | Input | Number, target: Memory | Output, funcs: List[FuncName]):
-        self.line = line
+        super().__init__(line)
         self.origin = origin
         self.target = target
         self.funcs = funcs
@@ -64,14 +64,14 @@ class While(Shift):
         super().__init__(line, Number(line), Register("jmp"), [])
 
 
-class Block (Statement):
-    def __init__(self, content: List[Statement] | List[Var]):
+class Block(Token):
+    def __init__(self, content: List[Statement]):
         self.content = content
 
 
-class VarBlock (Block):
+class VarBlock (Token):
     def __init__(self, names: List[Var]):
-        super().__init__(names)
+        self.content = names
 
 
 class Function (Block):
@@ -80,11 +80,12 @@ class Function (Block):
         self.var_block = var_block
 
 
-class IfFi (Block):
-    def __init__(self, content: (List[Statement])):
-        super().__init__(content)
+class IfFi (Statement):
+    def __init__(self, line: int, content: (List[Statement])):
+        super().__init__(line)
+        self.content = content
 
 
 class Elihw (IfFi):
-    def __init__(self):
-        super().__init__([Jump()])
+    def __init__(self, line: int):
+        super().__init__(line, [Jump(line)])
