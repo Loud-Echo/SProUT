@@ -31,12 +31,14 @@ def parse_func(i: int, tokens: List[Tuple[int, str]]) -> (Function, int):
     var_block = VarBlock(list(map(lambda x: Var(x), var_names)))
     i += 1
 
-    operations, i = parse_block(i, tokens, var_block, "cnuf")
+    re = Function(var_block, [])
+    operations, i = parse_block(i, tokens, re, var_block, "cnuf")
+    re.set_content(operations)
+    return re, i
 
-    return Function(var_block, operations), i
 
-
-def parse_block(i: int, tokens: List[Tuple[int, str]], var_block: VarBlock, end_token: str) -> (List[Block | Shift], int):
+def parse_block(i: int, tokens: List[Tuple[int, str]], parent: Token, var_block: VarBlock,
+                end_token: str) -> (List[Block | Shift], int):
     operations = []
     origins = ["<", ">", "inn", "jmp", "tst"] + list(map(lambda x: x.name, var_block.content))
     in_block = True
@@ -45,16 +47,16 @@ def parse_block(i: int, tokens: List[Tuple[int, str]], var_block: VarBlock, end_
             case e if e == end_token:
                 in_block = False
             case "if":
-                iffi_ops, i = parse_block(i+1, tokens, var_block, "fi")
-                operations.append(IfFi(iffi_ops))
+                iffi_ops, i = parse_block(i+1, tokens, parent, var_block, "fi")
+                operations.append(IfFi(tokens[i][0], parent, iffi_ops))
             case "jump":
-                operations.append(Jump())
+                operations.append(Jump(tokens[i][0], parent))
             case "while":
-                operations.append(While(tokens[i][0]))
+                operations.append(While(tokens[i][0], parent))
             case "elihw":
-                operations.append(Elihw())
+                operations.append(Elihw(tokens[i][0], parent))
             case o if o in origins or o[0] == '"':
-                shift, i = parse_shift(i, tokens, var_block)
+                shift, i = parse_shift(i, tokens, parent, var_block)
                 operations.append(shift)
             case _:
                 raise (SyntaxError(f"Error in Block Parsing (line #{tokens[i][0]})"))
@@ -62,7 +64,7 @@ def parse_block(i: int, tokens: List[Tuple[int, str]], var_block: VarBlock, end_
     return operations, i - 1
 
 
-def parse_shift(i: int, tokens: List[Tuple[int, str]], var_block: VarBlock) -> (Shift, int):
+def parse_shift(i: int, tokens: List[Tuple[int, str]], parent: Token, var_block: VarBlock) -> (Shift, int):
     line = tokens[i][0]
     match tokens[i][1]:
         case "inn":
@@ -96,4 +98,4 @@ def parse_shift(i: int, tokens: List[Tuple[int, str]], var_block: VarBlock) -> (
                 funcs.append(FuncName(func_name))
                 in_shift = True
     assert(targ is not None)
-    return Shift(line, orig, targ, funcs), i
+    return Shift(line, parent, orig, targ, funcs), i

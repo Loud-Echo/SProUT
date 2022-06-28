@@ -14,17 +14,19 @@ def run_func(f_string, funcs: dict[str, tokens.Function], inn: memory.Inn, out: 
     s = f.content[0]
     running = True
     while running:
-        s = run_statement(s, f.content, variables, inn, out, left, right, tst, jmp)
+        s = run_statement(funcs, s, variables, inn, out, left, right, tst, jmp)
 
 
-def run_statement(s: tokens.Statement, statements: List[tokens.Statement], variables: dict[str, memory.FixedMem],
+def find_line(token: tokens.Token, line: int) -> tokens.Token:
+    pass    # TODO
+
+
+def run_statement(funcs: dict[str, tokens.Function], s: tokens.Statement, variables: dict[str, memory.FixedMem],
                   inn: memory.Inn, out: memory.Out, left: memory.Stack, right: memory.Stack,
                   tst: memory.FixedMem, jmp: memory.FixedMem) -> tokens.Statement:
     match s:
         case tokens.Jump:
-            for i in statements:
-                if i.line == jmp.get():
-                    return i
+            return find_line(s, jmp.get())
         case tokens.Shift:
             match s.origin:
                 case tokens.Var:
@@ -41,7 +43,7 @@ def run_statement(s: tokens.Statement, statements: List[tokens.Statement], varia
                 case tokens.Register:
                     if s.orig.name == "jmp":
                         orig = jmp
-                    if s.orig.naem == "tst":
+                    if s.orig.name == "tst":
                         orig = tst
             match s.target:
                 case tokens.Var:
@@ -61,8 +63,13 @@ def run_statement(s: tokens.Statement, statements: List[tokens.Statement], varia
                     if s.target.naem == "tst":
                         targ = tst
             if s.funcs:
-                pass   # TODO
+                
             else:
                 targ.push(orig.get())
         case tokens.IfFi:
-            pass    # fuck
+            nex = False
+            for i in s.parent:
+                if nex:
+                    return i
+                if i == s:
+                    nex = True
