@@ -1,4 +1,17 @@
-class DynMem:
+import abc
+
+
+class Memory(abc.ABC):
+    @abc.abstractmethod
+    def get(self):
+        pass
+
+    @abc.abstractmethod
+    def push(self, element):
+        pass
+
+
+class DynMem(Memory):
     def get(self):
         raise(IndexError("Can't get Element"))
 
@@ -21,14 +34,6 @@ class Stack(DynMem):
 
 
 class Inn(DynMem):
-    def __init__(self, destination):
-        self.destination = destination
-
-    def push(self, element):
-        self.destination(element)
-
-
-class Out(DynMem):
     def __init__(self, source):
         self.source = source
 
@@ -36,12 +41,40 @@ class Out(DynMem):
         return self.source()
 
 
-class FixedMem:
+class BufferedInn(Inn):
+    def __init__(self, source):
+        super().__init__(source)
+        self.buffer = []
+
+    def get(self):
+        if not self.buffer:
+            self.buffer = self.source()
+        return self.buffer.pop(0)
+
+
+class Out(DynMem):
+    def __init__(self, destination):
+        self.destination = destination
+
+    def push(self, element):
+        self.destination(element)
+
+
+class FixedMem(Memory):
     def __init__(self):
         self.val = 0
+
+    def get(self):
+        return self.val
 
     def push(self, val):
         self.val = val
 
-    def get(self):
-        return self.val
+
+class Number(FixedMem):
+    def __init__(self, val):
+        super().__init__()
+        self.val = val
+
+    def push(self, val):
+        raise (IndexError("Can't push Element"))

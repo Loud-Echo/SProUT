@@ -1,18 +1,8 @@
-func main
-    var
-        hehe
-    rav
-    "1394 <
-    > <   # hehee
-    < tst
-    inn hehe
-    hehe jmp
+func main var rav
+    "0 tst
+    tst out
     if
-        hehe <
-        while
-            hehe >
-        elihw
+        "2 out
     fi
-    jump
-    < >
+    "3 out
 cnuf
