@@ -1,0 +1,71 @@
+func add var a b rav
+    inn a
+    inn b
+    a out
+    b out
+    b tst
+    if
+        b ltz tst
+        if
+            b tst
+            while
+                tst incr tst
+                a neg incr neg a
+            elihw
+        fi b ltz neg incr neg tst
+        if
+            b tst
+            while
+                tst neg incr neg tst
+                a incr a
+            elihw
+        fi
+    fi
+    a out
+cnuf
+
+func sub var a rav
+    inn a
+    inn neg <
+    a <
+    < mat_lib.add mat_lib.pull3 out
+cnuf
+
+func pull3 var rav inn out inn out inn out cnuf
+
+func mul var a b rav
+    inn a
+    inn b
+    b ltz tst
+    if
+        b neg b
+        a neg a
+    fi
+    b tst
+    "0 b
+    while
+        tst neg incr neg tst
+        a <
+        b <
+        < mat_lib.add b
+    elihw b out cnuf
+
+func mod var a b rav # TODO
+    inn a
+    inn b
+    a ltz tst
+    if
+        "-1 <
+        a <
+        < mat_lib.mul a
+    fi
+    while
+        b <
+        a <
+        < mat_lib.sub a
+        a ltz neg incr neg tst
+    elihw
+    a <
+    b <
+    < mat_lib.add out
+cnuf

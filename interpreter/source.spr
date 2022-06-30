@@ -1,8 +1,7 @@
+import mat_lib
+
 func main var rav
-    "0 tst
-    tst out
-    if
-        "2 out
-    fi
-    "3 out
+    "10 <
+    "4 <
+    < mat_lib.sub out
 cnuf

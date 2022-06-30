@@ -2,9 +2,6 @@ import memory
 import tokens
 
 
-# TODO Basisfunktion & mehr erfinden
-
-
 def run_func(f: tokens.Function, funcs: dict[str, tokens.Function],
              inn: memory.Inn, out: memory.Out,
              left: memory.Stack, right: memory.Stack):
@@ -18,16 +15,23 @@ def run_func(f: tokens.Function, funcs: dict[str, tokens.Function],
         s = run_statement(funcs, s, variables, inn, out, left, right, tst, jmp)
 
 
-def pull_from_funcs(func_path: list[tokens.Function], funcs_dict, origin: memory.Memory,
+def pull_from_funcs(func_names: list[str], funcs_dict, origin: memory.Memory,
                     left: memory.Stack, right: memory.Stack) -> list[int]:
-    if len(func_path) == 0:
+    if len(func_names) == 0:
         return [origin.get()]
-    f = func_path[len(func_path) - 1]
+    f_name = func_names[len(func_names) - 1]
+    if f_name == "incr":
+        return [pull_from_funcs(func_names[0:-1], funcs_dict, origin, left, right)[0] + 1]
+    elif f_name == "neg":
+        return [-1 * pull_from_funcs(func_names[0:-1], funcs_dict, origin, left, right)[0]]
+    elif f_name == "ltz":
+        return [1 if pull_from_funcs(func_names[0:-1], funcs_dict, origin, left, right)[0] < 0 else 0]
+    f = funcs_dict[f_name]
     funcs = funcs_dict
     re = []
 
     def pipe_inn():
-        return pull_from_funcs(func_path[0:-1], funcs_dict, origin, left, right)
+        return pull_from_funcs(func_names[0:-1], funcs_dict, origin, left, right)
 
     def pipe_out(val):
         re.append(val)
@@ -44,9 +48,9 @@ def find_line(block: tokens.Function | tokens.IfFi, line: int) -> tokens.Stateme
         index = binary_search(content, line)
         if content[index].line == line:
             return content[index]
-        elif type(content[index] == tokens.IfFi):
+        elif isinstance(block, (tokens.IfFi, tokens.Elihw)):
             return find_line(content[index].content, line)
-    elif type(block) == tokens.IfFi:
+    elif isinstance(block, (tokens.IfFi, tokens.Elihw)):
         return find_line(block.parent, line)
     raise (RuntimeError(f"couldn't find specified line ({line})"))
 
@@ -84,7 +88,7 @@ def run_statement(funcs: dict[str, tokens.Function], s: tokens.Statement, variab
                   inn: memory.Inn, out: memory.Out, left: memory.Stack, right: memory.Stack,
                   tst: memory.FixedMem, jmp: memory.FixedMem) -> tokens.Statement:
     if isinstance(s, tokens.Jump):
-        return find_line(s.parent.content, jmp.get())
+        return find_line(s.parent, jmp.get())
     elif isinstance(s, (tokens.IfFi, tokens.Elihw)):
         if tst.get() == 0 or not s.content:
             return get_next(s)
@@ -128,7 +132,7 @@ def run_statement(funcs: dict[str, tokens.Function], s: tokens.Statement, variab
                 targ = jmp
             if s.target.name == "tst":
                 targ = tst
-        result = pull_from_funcs([funcs[name_obj.name] for name_obj in s.funcs], funcs, orig, left, right)
+        result = pull_from_funcs([name_obj.name for name_obj in s.funcs], funcs, orig, left, right)
         for i in result:
             targ.push(i)
         return get_next(s)
