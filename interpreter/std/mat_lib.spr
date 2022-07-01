@@ -1,9 +1,5 @@
 func add var a b rav
-    inn a
-    inn b
-    a out
-    b out
-    b tst
+    inn a  inn b  b tst
     if
         b ltz tst
         if
@@ -24,48 +20,34 @@ func add var a b rav
     a out
 cnuf
 
-func sub var a rav
-    inn a
-    inn neg <
-    a <
-    < mat_lib.add mat_lib.pull3 out
-cnuf
-
-func pull3 var rav inn out inn out inn out cnuf
+func sub var a rav inn a  inn neg <  a < < mat_lib.add out cnuf
 
 func mul var a b rav
-    inn a
-    inn b
+    inn a  inn b
     b ltz tst
-    if
-        b neg b
-        a neg a
-    fi
-    b tst
-    "0 b
+    if  b neg b  a neg a  fi
+    b tst  "0 b
     while
         tst neg incr neg tst
-        a <
-        b <
+        a <  b <
         < mat_lib.add b
-    elihw b out cnuf
+    elihw b out
+cnuf
 
-func mod var a b rav # TODO
-    inn a
-    inn b
+func mod var a b rav
+    inn a  inn b
     a ltz tst
     if
-        "-1 <
-        a <
+        "-1 <  a <
         < mat_lib.mul a
-    fi
+    fi b ltz tst
+    if  "-1 out  "52 jmp jump  fi
     while
-        b <
-        a <
+        b <  a <
         < mat_lib.sub a
         a ltz neg incr neg tst
     elihw
-    a <
-    b <
+    a <  b <
     < mat_lib.add out
+    tst tst # dummy operation
 cnuf

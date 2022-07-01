@@ -1,11 +1,17 @@
 from tokens import *
-from typing import List, Tuple
 
 
-RESERVED = ["<", ">", "inn", "out", "tst", "jmp", "if", "fi", "while", "elihw", "jump", "var", "rav", "func", "cnuf"]
+# reservierte Tokens, welche nicht für Variablen etc. verwendet werden sollten
+RESERVED = ["<", ">", "inn", "out", "tst", "jmp", "if", "fi", "while", "elihw",
+            "jump", "var", "rav", "func", "cnuf", "incr", "neg", "ltz"]
 
 
-def parse_file(tokens: List[Tuple[int, str]]):
+def parse_file(tokens: list[tuple[int, str]]) -> dict[str, Function]:
+    """
+    generiert aus den Strings einer Datei ihre Funktionen
+    :param tokens: einzelne Tokens (tuple([Zeile],[Token String]))
+    :return: Liste der Funktionen
+    """
     funcs = {}
     i = 0
     while i < len(tokens):
@@ -17,7 +23,14 @@ def parse_file(tokens: List[Tuple[int, str]]):
     return funcs
 
 
-def parse_func(i: int, tokens: List[Tuple[int, str]]) -> (Function, int):
+def parse_func(i: int, tokens: list[tuple[int, str]]) -> (Function, int):
+    """
+    generiert eine Funktion aus einer Menge an Tokens
+    :param i: anfangspunkt innerhalb der tokens
+    :param tokens: Liste der tokens
+    :return: (Function-Objekt, Index des nächsten tokens)
+    """
+    # lesen der Var Rav Block
     if tokens[i][1] != "var":
         raise (SyntaxError(f"Error in Function Parsing (line #{tokens[i][0]})"))
     i += 1
@@ -30,17 +43,27 @@ def parse_func(i: int, tokens: List[Tuple[int, str]]) -> (Function, int):
         i += 1
     var_block = VarBlock(list(map(lambda x: Var(x), var_names)))
     i += 1
+    # einlesen der Operationen
     operations, i = parse_block(i, tokens, var_block, "cnuf")
     return Function(var_block, operations), i
 
 
-def parse_block(i: int, tokens: List[Tuple[int, str]], var_block: VarBlock,
-                end_token: str) -> (List[Block | Shift], int):
+def parse_block(i: int, tokens: list[tuple[int, str]], var_block: VarBlock,
+                end_token: str) -> (list[Block | Shift], int):
+    """
+    liest einen Block an Operationen ein
+    :param i: anfangspunkt innerhalb der tokens
+    :param tokens: Liste der tokens
+    :param var_block: Variablen Namen
+    :param end_token: Token, der das Ende des Blocks anzeight
+    :return: (Liste an Operationen, Index des nächsten tokens)
+    """
     operations = []
+    # Liste der möglichen Ausgangspunkte einer Datenverschiebung
     origins = ["<", ">", "inn", "jmp", "tst"] + list(map(lambda x: x.name, var_block.content))
     in_block = True
     while in_block:
-        match tokens[i][1]:
+        match tokens[i][1]:  # Pattern Matching der verschiedenen Arten von Blöcken
             case e if e == end_token:
                 in_block = False
             case "if":
@@ -65,8 +88,16 @@ def parse_block(i: int, tokens: List[Tuple[int, str]], var_block: VarBlock,
     return operations, i - 1
 
 
-def parse_shift(i: int, tokens: List[Tuple[int, str]], var_block: VarBlock) -> (Shift, int):
+def parse_shift(i: int, tokens: list[tuple[int, str]], var_block: VarBlock) -> (Shift, int):
+    """
+    Liest eine Verschiebung ein
+    :param i: anfangspunkt innerhalb der tokens
+    :param tokens: Liste der tokens
+    :param var_block: Variablen Namen
+    :return: (Shift-Objekt, Index des nächsten Tokens)
+    """
     line = tokens[i][0]
+    # Pattern matching des Ausgangspunkt
     match tokens[i][1]:
         case "inn":
             orig = Input()
@@ -83,6 +114,7 @@ def parse_shift(i: int, tokens: List[Tuple[int, str]], var_block: VarBlock) -> (
     funcs = []
     in_shift = True
     targ = None
+    # Patter matching des Ziels
     while in_shift:
         in_shift = False
         i += 1

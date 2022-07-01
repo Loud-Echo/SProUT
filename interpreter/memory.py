@@ -1,6 +1,9 @@
 import abc
 
 
+# Diese Datei definiert die verschiedenen Arten von Speicher, welche SProUT verwendet (größtenteils selbsterklärend)
+
+
 class Memory(abc.ABC):
     @abc.abstractmethod
     def get(self):

@@ -5,13 +5,18 @@ Die Syntax von Sprout basiert auf Datenströmen, von Speicherort zu Speicherort 
 Funktionen werden durch folgende Syntax gekennzeichnet:
 ```
 func [Name der Funktion]
+    var
+        [Variablen Block (opt. var u. rav müssen jedoch existieren)]
+    rav
     [Inhalt der Funktion]
 cnuf
 ```
+Hierbei ist zu beachten, dass beim Ausführen der Funktion sie folgendermaßen 
+angesprochen werden muss: `[Name der Datei (ohne .spr)].[Name der Funktion]` Dies wird getan, um keine doppelte definition desselben Namens in zwei Dateien zuzulassen.
 
 ## Symbole der Speicherorte
 Der rechte Stack wird `>` geschrieben, der linke `<`, Input `inn` Output `out`, das Jumpregister `jmp`, das Testregister `tst`
-Die verwendeten Variablen werden am Anfang einer Funktion mit folegnder Syntax definiert:
+Die verwendeten Variablen werden am Anfang einer Funktion mit folgender Syntax definiert:
 ```
 var 
     [Name einer Variable]
@@ -26,10 +31,10 @@ Die Verschiebung von Daten wird durch folgende Syntax dargestellt:
 
 `[Ausgangspeicher] [Funktionen (opt.)] [Zielspeicher];`
 
-Wenn mehrere Funktionen an einander gekettet werden, kann eine Funktion weniger Daten einlesen, 
+Wenn mehrere Funktionen aneinander gekettet werden, kann eine Funktion weniger Daten einlesen, 
 als die letzte berechnet hat. Diese Daten werden trotzdem berechnet, jedoch nicht verwendet. Wenn sie jedoch mehr
-einlesen möchte, wird ein Fehler hervorgerufen. genause verhält es sich auch, wenn eine Funktion mehr auslesen möchte, 
-als in diesem vorhanden sind. Beim Input von der Konsole, wird in diesem Fall auf den Nutzer gewartet.
+einlesen möchte, wird ein Fehler hervorgerufen. Genauso verhält es sich auch, wenn eine Funktion mehr auslesen möchte, 
+als in diesem vorhanden sind. Beim Input von der Konsole wird in diesem Fall auf den Nutzer gewartet.
 
 Anmerkungen: 
 Wenn keine Funktione spezifiziert ist, dann wird nur ein Element verschoben; 
@@ -45,14 +50,13 @@ fi
 ```
 
 ## Das Jumpregister
-Das Jumpregister kann auf eine bestimmte Token-Nummer gesetzt werden (Erlkärung zu Token-Nummer in eigenem Eintrag). 
-<!--- TODO: besagte eigene Datei---> Durch das Schlagwort `jump`, springt die Ausführung des Programms an diese Stelle. Falls der Token nicht Teil 
-der momentanen Funktion ist oder Anfang eines Blockes/einer Operation ist, 
-wird nicht gesprungen und ein Fehler wird hervorgerufen.
+Das Jumpregister kann auf eine bestimmte Zeile gesetzt werden. 
+Durch das Schlagwort `jump`, springt die Ausführung des Programms an diese Stelle. Falls die Zeile nicht Teil 
+der momentanen Funktion ist, wird nicht gesprungen und ein Fehler wird hervorgerufen.
 
 ## Die While-Schleife
 Die While-Schleife kombiniert die letzten beiden Konzepte: Das Schlagwort `while` setzt das Jumpregister 
-auf die momentane Zeile, `elihw` tut das selbe wie:
+auf die momentane Zeile, `elihw` tut dasselbe wie:
 ```
 if 
     jump
@@ -63,8 +67,17 @@ beendet wird, ist jedoch stark empfohlen. Auch verschachtelte Blöcke sind bei `
 bei `while ... elihw`-Blöcken
 
 ## Kommentare
-Kommentare werden durch ein `#` markiert. Nach diesem Zeichen wird der Reste der Zeile als Kommentar aufgefasst.
+Kommentare werden durch ein `# ` markiert. Nach diesem Zeichen wird der Reste der Zeile als Kommentar aufgefasst.
 
-## Sonderfälle
+## Importieren andere Dateien
+Um die Funktionen einer anderen Datei zu verwenden, können wir diese am Anfang des Programms importieren:
+```
+import [Datei]
+import [Datei]
+import [Datei]
+...
+```
+
+## Zahlen
 Wenn man Zahlen im Programm verwenden möchte, muss man dies durch das Hinzufügen eines `"` am Anfang der Zahl markieren.
 Um also zum Beispiel die Zahl 3 auf den linken Stack zu schieben müsste man `"3 <` schreiben.

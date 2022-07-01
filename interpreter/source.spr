@@ -1,7 +1,5 @@
-import mat_lib
+import std.mat_lib
 
 func main var rav
-    "10 <
-    "4 <
-    < mat_lib.sub out
+    "7 <  "16 <  < mat_lib.mod out
 cnuf
