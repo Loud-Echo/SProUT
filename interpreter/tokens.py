@@ -20,20 +20,32 @@ class Var (Memory):
     def __init__(self, name: str):
         self.name = name
 
+    def __str__(self):
+        return f"var({self.name})"
+
 
 class Stack (Memory):
     def __init__(self, name: str):
         self.name = name
+
+    def __str__(self):
+        return f"stack({self.name})"
 
 
 class Register (Memory):
     def __init__(self, name: str):
         self.name = name
 
+    def __str__(self):
+        return f"reg({self.name})"
+
 
 class Number (Token):
     def __init__(self, val: int):
         self.val = val
+
+    def __str__(self):
+        return f"num({self.val})"
 
 
 class Input (Token):
@@ -62,6 +74,9 @@ class Shift (Statement):
         self.target = target
         self.funcs = funcs
 
+    def __str__(self):
+        return f"shift: {self.origin} {self.funcs} -> {self.target}"
+
 
 class While(Shift):
     def __init__(self, line: int):
@@ -84,6 +99,9 @@ class Function (Block):
     def __init__(self, var_block: VarBlock, operations: List[Statement]):
         super().__init__(operations)
         self.var_block = var_block
+
+    def __str__(self):
+        return "-> function"
 
 
 class IfFi (Statement):

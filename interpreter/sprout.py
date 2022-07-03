@@ -65,8 +65,13 @@ def interpret(file_name: str) -> None:
     :param file_name: Name der Datei
     """
     funcs = get_funcs(file_name)  # Parsen
+    s = lambda: int(input())  # wunderschöne lambda expression die ich statt inp() nutzen wollte
 
-    runner.run_func(funcs[file_name[0:-4] + ".main"], funcs, memory.Inn(input), memory.Out(print),
+    def inp():
+        print() # ohne dieses print funktioniert es nicht und ich weiß nicht warum... von daher bleibt es.
+        return s()
+
+    runner.run_func(funcs[file_name[0:-4] + ".main"], funcs, memory.Inn(inp), memory.Out(print),
                     memory.Stack(), memory.Stack())  # Ausführen
 
 

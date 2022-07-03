@@ -82,7 +82,6 @@ def parse_block(i: int, tokens: list[tuple[int, str]], var_block: VarBlock,
                 shift, i = parse_shift(i, tokens, var_block)
                 operations.append(shift)
             case _:
-                print(tokens[i])
                 raise (SyntaxError(f"Error in Block Parsing (line #{tokens[i][0]})"))
         i += 1
     return operations, i - 1

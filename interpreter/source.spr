@@ -1,5 +1,8 @@
-import std.mat_lib
+import std.stk_lib
 
 func main var rav
-    "7 <  "16 <  < mat_lib.mod out
+    "-1 < "5 < "300 < "7 < "6 < "8 < "20 < "10 < "8 < "-1 >
+    "-1 print_stacks tst
+    "-1 stk_lib.bubble out
+    "-1 print_stacks tst
 cnuf

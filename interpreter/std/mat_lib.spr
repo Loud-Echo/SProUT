@@ -51,3 +51,46 @@ func mod var a b rav
     < mat_lib.add out
     tst tst # dummy operation
 cnuf
+
+func pow var b e rav
+    inn b inn e
+    e ltz tst
+    if
+        "-1 out
+    fi tst neg incr neg tst
+    if
+        e tst
+        "1 <
+        while
+            b < < mat_lib.mul <
+            tst neg incr neg tst
+        elihw
+        < out
+    fi
+cnuf
+
+func even var a rav
+    inn a
+    a ltz tst
+    if
+        a neg mat_lib.even out
+        "95 jmp
+        jump
+    fi
+    a neg ltz tst
+    if
+        a tst
+        if "85 jmp jump fi
+        "1 out "95 jmp jump
+        "82 jmp
+        a ltz tst
+        if
+            "0 out
+            "95 jmp
+        fi
+        a neg incr neg a
+        a neg incr neg a
+        jump
+    fi
+    tst tst # Dummy
+cnuf

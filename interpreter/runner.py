@@ -2,8 +2,6 @@ import memory
 import tokens
 
 
-# TODO kommentare
-
 def run_func(f: tokens.Function, funcs: dict[str, tokens.Function],
              inn: memory.Inn, out: memory.Out,
              left: memory.Stack, right: memory.Stack) -> None:
@@ -25,6 +23,9 @@ def run_func(f: tokens.Function, funcs: dict[str, tokens.Function],
     # ausführen der Befehle
     s = f.content[0]
     while s:
+        #print(s)
+        #print(left.data)
+        #print(right.data)
         s = run_statement(funcs, s, variables, inn, out, left, right, tst, jmp)
 
 
@@ -50,6 +51,9 @@ def pull_from_funcs(func_names: list[str], funcs_dict, origin: memory.Memory,
         return [-1 * pull_from_funcs(func_names[0:-1], funcs_dict, origin, left, right)[0]]
     elif f_name == "ltz":
         return [1 if pull_from_funcs(func_names[0:-1], funcs_dict, origin, left, right)[0] < 0 else 0]
+    elif f_name == "print_stacks":
+        print(left.data.__str__() + "<>" + right.data[::-1].__str__())
+        return [0]
 
     f = funcs_dict[f_name]
     funcs = funcs_dict
@@ -80,8 +84,8 @@ def find_line(block: tokens.Function | tokens.IfFi, line: int) -> tokens.Stateme
         index = binary_search(content, line)
         if content[index].line == line:
             return content[index]
-        elif isinstance(block, (tokens.IfFi, tokens.Elihw)):
-            return find_line(content[index].content, line)
+        elif isinstance(content[index], (tokens.IfFi, tokens.Elihw)):
+            return find_line(content[index], line)
     elif isinstance(block, (tokens.IfFi, tokens.Elihw)):
         return find_line(block.parent, line)
     raise (RuntimeError(f"Couldn't find specified line ({line})"))
@@ -99,10 +103,10 @@ def binary_search(content: list[tokens.Statement], line: int) -> int:
     index = -1
     while (first <= last) and (index == -1):
         mid = (first + last) // 2
-        if content[mid].line >= line > content[mid - 1].line:
+        if (mid == 0 and content[mid].line == line) or content[mid].line >= line > content[mid - 1].line:
             index = mid
         else:
-            if line < content[mid].line:
+            if line <= content[mid].line:
                 last = mid - 1
             else:
                 first = mid + 1

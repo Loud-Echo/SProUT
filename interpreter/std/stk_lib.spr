@@ -1,0 +1,67 @@
+import std.mat_lib
+
+func linear var t s e rav # s: Begrenzung t: Ziel; e: momentanes Element
+    inn t
+    inn s
+    while
+        > e
+        e <
+        t < e < < mat_lib.sub tst
+        if
+            s < e < < mat_lib.sub tst
+            if jump fi
+        fi
+    "0 out
+cnuf
+
+func bubble
+    var
+        s # Begrenzung
+        a b # Vergleichspaar
+        o # ordered
+        loop # loop Zeile
+        tmp # temporäre Variable (verschiedener Nutzen)
+    rav
+    inn s
+    "1 o
+    while jmp loop
+        < a < b
+        b < s <
+        < mat_lib.sub tst
+        if
+            "35 jmp jump
+        fi
+        "53 jmp b < a < jump
+        a < b <
+        < mat_lib.sub tst
+        if "41 jmp jump fi
+        a > b <
+        loop jmp
+        jump
+        tst tmp
+        tst ltz tst
+        if
+            a > b <
+            loop jmp jump
+        fi
+        tmp neg ltz tst
+        if
+            b > a <
+            "0 o
+            loop jmp jump
+        fi
+        o tst
+        if
+            "66 jmp
+            jump
+        fi
+    while jmp tmp
+        > a
+        a < s <
+        < mat_lib.sub tst
+        if "64 jmp jump fi
+        a > loop neg incr neg jmp jump
+        a <
+        tmp jmp jump
+    "1 out
+cnuf
