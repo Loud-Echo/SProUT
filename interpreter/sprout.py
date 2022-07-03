@@ -2,7 +2,7 @@ import sys, os.path
 import parser, runner, memory, tokens
 
 
-def get_funcs(file_name: str) -> dict[str, tokens.Function]:
+def get_funcs(file_name: str) -> tuple[str, dict[str, tokens.Function]]:
     """
     ermittelt die Funktionen aus einer Datei
     :param file_name: Name der Datei
@@ -33,10 +33,11 @@ def get_funcs(file_name: str) -> dict[str, tokens.Function]:
                     dir_state = True
             imp_path = imp_directory + "/" + imp_name + ".spr"
             if os.path.exists(source_path + "/" + imp_path):
-                funcs.update(get_funcs(source_path + "/" + imp_path))
+                funcs.update(get_funcs(source_path + "/" + imp_path)[1])
             elif os.path.exists(imp_path):
-                funcs.update(get_funcs(imp_path))
+                funcs.update(get_funcs(imp_path)[1])
             else:
+                print(imp_path)
                 raise(ImportError(f"File {name} not found."))
         else:
             source_path = ""
@@ -48,15 +49,15 @@ def get_funcs(file_name: str) -> dict[str, tokens.Function]:
                     dir_state = True
             imp_path = source_path + "/" + name + ".spr"
             if os.path.exists(imp_path):
-                funcs.update(get_funcs(imp_path))
+                funcs.update(get_funcs(imp_path)[1])
             else:
                 raise(ImportError(f"File {name} not found."))
 
-    prefix = file_name.split("/")[-1][:-4]
+    prefix = file_name.split("\\")[-1].split("/")[-1][:-4]
     in_file = parser.parse_file(tokens)
     for k in in_file.keys():
         funcs[prefix + "." + k] = in_file[k]
-    return funcs
+    return prefix, funcs
 
 
 def interpret(file_name: str) -> None:
@@ -64,14 +65,16 @@ def interpret(file_name: str) -> None:
     parsed eine SProUT Datei und führt diese aus
     :param file_name: Name der Datei
     """
-    funcs = get_funcs(file_name)  # Parsen
+    prefix, funcs = get_funcs(file_name)  # Parsen
     s = lambda: int(input())  # wunderschöne lambda expression die ich statt inp() nutzen wollte
 
     def inp():
-        print() # ohne dieses print funktioniert es nicht und ich weiß nicht warum... von daher bleibt es.
-        return s()
+        a = s()
+        print("input:" + str(a))  # ohne dieses print funktioniert es nicht und ich weiß nicht warum... von daher bleibt es.
+        return a
 
-    runner.run_func(funcs[file_name[0:-4] + ".main"], funcs, memory.Inn(inp), memory.Out(print),
+    runner.run_func(funcs[prefix + ".main"], funcs,
+                    memory.Inn(inp), memory.Out(lambda out: print("output:" + str(out))),
                     memory.Stack(), memory.Stack())  # Ausführen
 
 

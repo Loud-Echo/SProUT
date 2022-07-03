@@ -32,3 +32,7 @@ Funktionen, die den Inhalt der Stacks bearbeiten werden in der Bibliothek stk_li
 |----------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | `std.stk_lib.linear` | Lineare Suche durch einen Bereich des Stacks - das erste eingelesene argument sollte die gesuchte Zahl sein, das zweite das Element, was den Datensatz begrenzt                            | `"-1 >  {befüllen mit des Stacks}  "-1 <  "3 <  < stk_lib.linear out # Die Grenze zwischen rechtem und linken Stack ist nun ein Element links von dem gesuchten Element - out: 0 ` |
 | `std.stk_lib.bubble` | BubbleSort Algorithmus - der eingelesene Parameter ist die Begrenzung des Datensatz in beide Richtungen, Die Grenze zwischen den Stacks sollte sich am rechten Rand des Datensatz befinden | `{Stacks im Zustand [-1, e2, e3, e0, e1, ...]<>[-1]} "-1 stk_lib.bubble out #{Stacks im Zustand [-1, e0]<>[e1, e2, e3, ..., -1]} out: 1`                                           |
+
+## Beispiele
+
+In `Beispiele.spr` sind Codebeispiele für SProUT, weitere Inspiration kann man in den Implementationen der std Lib finden.

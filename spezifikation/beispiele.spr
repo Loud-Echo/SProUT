@@ -1,0 +1,42 @@
+import std.mat_lib
+import std.stk_lib
+
+func demo_add var rav
+    inn < inn < < mat_lib.add out
+cnuf
+
+func demo_eq var else rav
+    inn < inn < < mat_lib.sub tst
+    "0 else
+    if "0 out "1 else fi # not equal
+    else neg incr tst
+    if "1 out fi # equal
+cnuf
+
+func demo_stacks
+    var a rav
+    "-1 < "-1 >
+    inn < inn < inn < inn < inn < inn <
+    "-1 stk_lib.bubble a
+    > out
+    > out
+    > out
+    > out
+    < out
+    "-1 out "-1 out # Barrier between 1st and second output
+    inn > inn > inn > inn > inn > inn >
+    inn <
+    < stk_lib.linear a
+    while # outputs everything right of the input
+        > a a out a >
+        "-1 >
+        > mat_lib.sub tst
+    elihw
+cnuf
+
+
+func main var rav
+    inn beispiele.demo_add out
+    inn beispiele.demo_eq out
+    inn beispiele.demo_stacks out
+cnuf
